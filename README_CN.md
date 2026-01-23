@@ -10,6 +10,26 @@
 - **权限请求提醒**：Claude 需要授权时立即提醒
 - **等待输入提醒**：Claude 等待你输入时发出通知
 - **跨平台支持**：支持 macOS、Windows 和 Linux
+- **多语言支持**：自动检测系统语言（中文、英语、日语、韩语、德语、法语、西班牙语）
+
+## 更新日志
+
+### v1.0.2 (2026-01-23)
+
+**新功能**
+- 🌍 支持 7 种语言国际化：English, 简体中文, 日本語, 한국어, Deutsch, Français, Español
+- 🔔 新增通知类型：`auth_success`（认证成功）、`elicitation_dialog`（MCP 工具输入）
+- 🛡️ 新增消息内容兜底检测（解决 Claude Code 的 `notification_type` 缺失问题）
+
+**改进**
+- ✨ 所有通知类型添加 emoji 标识
+- 🧪 新增完整测试套件（51 个测试用例）
+
+### v1.0.0 (2026-01-23)
+
+- 首次发布
+- 支持 Stop 和 Notification 钩子
+- 跨平台支持（macOS、Windows、Linux）
 
 ## 安装方式
 

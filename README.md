@@ -10,6 +10,26 @@ Desktop notifications for [Claude Code](https://docs.anthropic.com/en/docs/claud
 - **Permission Prompts**: Know immediately when Claude needs your approval
 - **Idle Prompts**: Get alerted when Claude is waiting for your input
 - **Cross-Platform**: Works on macOS, Windows, and Linux
+- **Multi-Language Support**: Auto-detects system language (EN, ZH, JA, KO, DE, FR, ES)
+
+## Changelog
+
+### v1.0.2 (2026-01-23)
+
+**New Features**
+- 🌍 Add i18n support for 7 languages: English, 简体中文, 日本語, 한국어, Deutsch, Français, Español
+- 🔔 Add new notification types: `auth_success`, `elicitation_dialog`
+- 🛡️ Add fallback message detection for missing `notification_type` (workaround for Claude Code bug)
+
+**Improvements**
+- ✨ Add emoji indicators for all notification types
+- 🧪 Add comprehensive test suite (51 tests)
+
+### v1.0.0 (2026-01-23)
+
+- Initial release
+- Support for Stop and Notification hooks
+- Cross-platform support (macOS, Windows, Linux)
 
 ## Installation
 
