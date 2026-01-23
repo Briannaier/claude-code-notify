@@ -14,6 +14,12 @@ Desktop notifications for [Claude Code](https://docs.anthropic.com/en/docs/claud
 
 ## Changelog
 
+### v1.0.3 (2026-01-23)
+
+**Bug Fixes**
+- 🔕 Fix repeated idle notifications - now only sends **one notification per idle state**
+- 🔄 Automatically resets when user sends a new message
+
 ### v1.0.2 (2026-01-23)
 
 **New Features**
