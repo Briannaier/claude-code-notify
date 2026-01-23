@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "claude-code-notify"
-version = "1.0.2"
+version = "1.0.3"
 description = "Desktop notifications for Claude Code - get notified when tasks complete"
 readme = "README.md"
 license = "Apache-2.0"

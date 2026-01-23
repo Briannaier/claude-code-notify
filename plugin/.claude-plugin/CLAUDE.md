@@ -7,5 +7,5 @@
 
 | ID | Time | T | Title | Read |
 |----|------|---|-------|------|
-| #860 | 10:15 AM | 🟣 | Claude Plugin Structure Added to Repository | ~317 |
+| #871 | 11:56 AM | 🔵 | Located Plugin Manifest for Claude Code Extension | ~265 |
 </claude-mem-context>

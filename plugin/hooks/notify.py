@@ -173,6 +173,58 @@ def debug_log(msg: str) -> None:
         pass
 
 
+# ============================================================================
+# Notification Deduplication
+# ============================================================================
+
+STATE_FILE = Path("/tmp/claude_code_notify_state.json")
+
+
+def load_state() -> dict:
+    """Load notification state from file."""
+    try:
+        if STATE_FILE.exists():
+            with open(STATE_FILE, "r", encoding="utf-8") as f:
+                return json.load(f)
+    except Exception:
+        pass
+    return {}
+
+
+def save_state(state: dict) -> None:
+    """Save notification state to file."""
+    try:
+        with open(STATE_FILE, "w", encoding="utf-8") as f:
+            json.dump(state, f)
+    except Exception:
+        pass
+
+
+def should_notify_idle_prompt(session_id: str) -> bool:
+    """Check if we should send idle_prompt notification (only once per idle state)."""
+    state = load_state()
+
+    # Check if already notified for this session
+    if state.get(session_id, {}).get("idle_notified", False):
+        debug_log(f"Skipping idle_prompt for session {session_id[:8]}... (already notified)")
+        return False
+
+    # Mark as notified
+    state[session_id] = {"idle_notified": True}
+    save_state(state)
+
+    return True
+
+
+def clear_idle_state(session_id: str) -> None:
+    """Clear idle notification state when session has new activity."""
+    state = load_state()
+    if session_id in state:
+        del state[session_id]
+        save_state(state)
+        debug_log(f"Cleared idle state for session {session_id[:8]}...")
+
+
 def send_notification(title: str, message: str) -> bool:
     """Send a desktop notification based on the operating system."""
     system_type = platform.system()
@@ -305,6 +357,10 @@ def main() -> int:
                         if notification_type == "permission_prompt":
                             message = get_message(MSG_PERMISSION_PROMPT, lang)
                         elif notification_type == "idle_prompt":
+                            # Deduplicate idle_prompt notifications
+                            session_id = payload.get("session_id", "")
+                            if not should_notify_idle_prompt(session_id):
+                                return 0  # Skip duplicate notification
                             message = get_message(MSG_IDLE_PROMPT, lang)
                         elif notification_type == "auth_success":
                             message = get_message(MSG_AUTH_SUCCESS, lang)
@@ -334,6 +390,11 @@ def main() -> int:
 
                     # Handle Stop events
                     if "transcript_path" in payload:
+                        # Clear idle state - session has new activity
+                        session_id = payload.get("session_id", "")
+                        if session_id:
+                            clear_idle_state(session_id)
+
                         transcript_msg = get_latest_claude_message(payload["transcript_path"])
                         if len(transcript_msg) > 150:
                             message = transcript_msg[:150] + "..."
