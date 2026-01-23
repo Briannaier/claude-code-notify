@@ -1,0 +1,48 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "claude-code-notify"
+version = "1.0.0"
+description = "Desktop notifications for Claude Code - get notified when tasks complete"
+readme = "README.md"
+license = "MIT"
+authors = [
+    { name = "starpipi" }
+]
+keywords = ["claude", "claude-code", "notifications", "desktop", "macos", "windows", "linux"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Utilities",
+]
+requires-python = ">=3.8"
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/starpipi/claude-code-notify"
+Repository = "https://github.com/starpipi/claude-code-notify"
+Issues = "https://github.com/starpipi/claude-code-notify/issues"
+
+[project.scripts]
+claude-code-notify = "claude_code_notify.notify:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/claude_code_notify"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/src",
+    "/README.md",
+    "/LICENSE",
+]
