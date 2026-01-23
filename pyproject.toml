@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "claude-code-notify"
-version = "1.0.0"
+version = "1.0.2"
 description = "Desktop notifications for Claude Code - get notified when tasks complete"
 readme = "README.md"
 license = "Apache-2.0"
@@ -28,6 +28,9 @@ classifiers = [
 ]
 requires-python = ">=3.8"
 dependencies = []
+
+[project.optional-dependencies]
+test = ["pytest>=7.0.0", "pytest-cov>=4.0.0"]
 
 [project.urls]
 Homepage = "https://github.com/starpipi/claude-code-notify"
