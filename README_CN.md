@@ -13,21 +13,7 @@
 
 ## 安装方式
 
-### 方式一：Claude Code 插件安装（推荐）
-
-在 Claude Code 中添加插件市场：
-
-```bash
-claude /plugin:marketplace:add https://github.com/starpipi/claude-code-notify
-```
-
-然后安装插件：
-
-```bash
-claude /plugin:install notify
-```
-
-### 方式二：pip/uv 安装
+### 方式一：pip/uv 安装（推荐）
 
 ```bash
 pip install git+https://github.com/starpipi/claude-code-notify.git
@@ -68,6 +54,24 @@ uv tool install git+https://github.com/starpipi/claude-code-notify.git
 }
 ```
 
+### 方式二：Claude Code 插件安装
+
+将仓库克隆到插件市场目录：
+
+```bash
+git clone https://github.com/starpipi/claude-code-notify.git ~/.claude/plugins/marketplaces/claude-code-notify
+```
+
+然后在 `~/.claude/settings.json` 中启用插件：
+
+```json
+{
+  "enabledPlugins": {
+    "notify@claude-code-notify": true
+  }
+}
+```
+
 ## 平台要求
 
 ### macOS
@@ -95,11 +99,11 @@ sudo pacman -S libnotify
 通过命令行直接测试通知：
 
 ```bash
-# 插件安装方式
-python3 ~/.claude/plugins/cache/claude-code-notify/notify/*/plugin/hooks/notify.py "测试" "你好"
-
 # pip/uv 安装方式
 claude-code-notify "测试标题" "测试消息内容"
+
+# 插件安装方式
+python3 ~/.claude/plugins/marketplaces/claude-code-notify/plugin/hooks/notify.py "测试" "你好"
 ```
 
 ## 调试日志

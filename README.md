@@ -13,21 +13,7 @@ Desktop notifications for [Claude Code](https://docs.anthropic.com/en/docs/claud
 
 ## Installation
 
-### Option 1: Claude Code Plugin (Recommended)
-
-Add the marketplace in Claude Code:
-
-```bash
-claude /plugin:marketplace:add https://github.com/starpipi/claude-code-notify
-```
-
-Then install the plugin:
-
-```bash
-claude /plugin:install notify
-```
-
-### Option 2: pip/uv install
+### Option 1: pip/uv install (Recommended)
 
 ```bash
 pip install git+https://github.com/starpipi/claude-code-notify.git
@@ -68,6 +54,24 @@ Then add to `~/.claude/settings.json`:
 }
 ```
 
+### Option 2: Claude Code Plugin
+
+Clone the repository to the plugins marketplace directory:
+
+```bash
+git clone https://github.com/starpipi/claude-code-notify.git ~/.claude/plugins/marketplaces/claude-code-notify
+```
+
+Then enable the plugin in `~/.claude/settings.json`:
+
+```json
+{
+  "enabledPlugins": {
+    "notify@claude-code-notify": true
+  }
+}
+```
+
 ## Platform Requirements
 
 ### macOS
@@ -95,11 +99,11 @@ sudo pacman -S libnotify
 Test notifications directly from the command line:
 
 ```bash
-# If installed via plugin
-python3 ~/.claude/plugins/cache/claude-code-notify/notify/*/plugin/hooks/notify.py "Test" "Hello"
-
 # If installed via pip/uv
 claude-code-notify "Test Title" "Test message body"
+
+# If installed via plugin
+python3 ~/.claude/plugins/marketplaces/claude-code-notify/plugin/hooks/notify.py "Test" "Hello"
 ```
 
 ## Debug Logs
