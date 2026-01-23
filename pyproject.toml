@@ -7,7 +7,7 @@ name = "claude-code-notify"
 version = "1.0.0"
 description = "Desktop notifications for Claude Code - get notified when tasks complete"
 readme = "README.md"
-license = "MIT"
+license = "Apache-2.0"
 authors = [
     { name = "starpipi" }
 ]
