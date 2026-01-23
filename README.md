@@ -1,5 +1,7 @@
 # claude-code-notify
 
+English | [中文](./README_CN.md)
+
 Desktop notifications for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) - get notified when tasks complete, when permission is needed, or when Claude is waiting for input.
 
 ## Features
