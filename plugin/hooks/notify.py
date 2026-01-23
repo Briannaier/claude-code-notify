@@ -13,12 +13,154 @@ Supported platforms:
 
 import base64
 import json
+import locale
 import os
 import platform
 import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
+
+# ============================================================================
+# Internationalization (i18n) Support
+# ============================================================================
+
+# Message keys
+MSG_PERMISSION_PROMPT = "permission_prompt"
+MSG_IDLE_PROMPT = "idle_prompt"
+MSG_AUTH_SUCCESS = "auth_success"
+MSG_AUTH_REQUIRED = "auth_required"
+MSG_ELICITATION = "elicitation"
+MSG_QUESTION = "question"
+MSG_ATTENTION = "attention"
+MSG_TASK_COMPLETED = "task_completed"
+
+# Translations dictionary
+TRANSLATIONS = {
+    "en": {
+        MSG_PERMISSION_PROMPT: "🔐 Needs your permission",
+        MSG_IDLE_PROMPT: "⏳ Waiting for your input",
+        MSG_AUTH_SUCCESS: "✅ Authentication successful",
+        MSG_AUTH_REQUIRED: "🔑 Authentication required",
+        MSG_ELICITATION: "💬 MCP tool needs your input",
+        MSG_QUESTION: "❓ Claude has a question for you",
+        MSG_ATTENTION: "🔔 Needs your attention",
+        MSG_TASK_COMPLETED: "Task Completed",
+    },
+    "zh": {
+        MSG_PERMISSION_PROMPT: "🔐 需要您的授权",
+        MSG_IDLE_PROMPT: "⏳ 等待您的输入",
+        MSG_AUTH_SUCCESS: "✅ 认证成功",
+        MSG_AUTH_REQUIRED: "🔑 需要认证",
+        MSG_ELICITATION: "💬 MCP 工具需要您的输入",
+        MSG_QUESTION: "❓ Claude 有问题想问您",
+        MSG_ATTENTION: "🔔 需要您的关注",
+        MSG_TASK_COMPLETED: "任务已完成",
+    },
+    "ja": {
+        MSG_PERMISSION_PROMPT: "🔐 許可が必要です",
+        MSG_IDLE_PROMPT: "⏳ 入力をお待ちしています",
+        MSG_AUTH_SUCCESS: "✅ 認証成功",
+        MSG_AUTH_REQUIRED: "🔑 認証が必要です",
+        MSG_ELICITATION: "💬 MCPツールの入力が必要です",
+        MSG_QUESTION: "❓ Claudeから質問があります",
+        MSG_ATTENTION: "🔔 注意が必要です",
+        MSG_TASK_COMPLETED: "タスク完了",
+    },
+    "ko": {
+        MSG_PERMISSION_PROMPT: "🔐 권한이 필요합니다",
+        MSG_IDLE_PROMPT: "⏳ 입력을 기다리고 있습니다",
+        MSG_AUTH_SUCCESS: "✅ 인증 성공",
+        MSG_AUTH_REQUIRED: "🔑 인증이 필요합니다",
+        MSG_ELICITATION: "💬 MCP 도구 입력이 필요합니다",
+        MSG_QUESTION: "❓ Claude가 질문이 있습니다",
+        MSG_ATTENTION: "🔔 주의가 필요합니다",
+        MSG_TASK_COMPLETED: "작업 완료",
+    },
+    "de": {
+        MSG_PERMISSION_PROMPT: "🔐 Berechtigung erforderlich",
+        MSG_IDLE_PROMPT: "⏳ Warte auf Ihre Eingabe",
+        MSG_AUTH_SUCCESS: "✅ Authentifizierung erfolgreich",
+        MSG_AUTH_REQUIRED: "🔑 Authentifizierung erforderlich",
+        MSG_ELICITATION: "💬 MCP-Tool benötigt Eingabe",
+        MSG_QUESTION: "❓ Claude hat eine Frage",
+        MSG_ATTENTION: "🔔 Aufmerksamkeit erforderlich",
+        MSG_TASK_COMPLETED: "Aufgabe abgeschlossen",
+    },
+    "fr": {
+        MSG_PERMISSION_PROMPT: "🔐 Permission requise",
+        MSG_IDLE_PROMPT: "⏳ En attente de votre saisie",
+        MSG_AUTH_SUCCESS: "✅ Authentification réussie",
+        MSG_AUTH_REQUIRED: "🔑 Authentification requise",
+        MSG_ELICITATION: "💬 L'outil MCP nécessite une entrée",
+        MSG_QUESTION: "❓ Claude a une question",
+        MSG_ATTENTION: "🔔 Attention requise",
+        MSG_TASK_COMPLETED: "Tâche terminée",
+    },
+    "es": {
+        MSG_PERMISSION_PROMPT: "🔐 Se necesita permiso",
+        MSG_IDLE_PROMPT: "⏳ Esperando su entrada",
+        MSG_AUTH_SUCCESS: "✅ Autenticación exitosa",
+        MSG_AUTH_REQUIRED: "🔑 Autenticación requerida",
+        MSG_ELICITATION: "💬 La herramienta MCP necesita entrada",
+        MSG_QUESTION: "❓ Claude tiene una pregunta",
+        MSG_ATTENTION: "🔔 Se requiere atención",
+        MSG_TASK_COMPLETED: "Tarea completada",
+    },
+}
+
+
+def get_system_language() -> str:
+    """Detect system language and return language code (e.g., 'en', 'zh', 'ja')."""
+    try:
+        system_type = platform.system()
+
+        # macOS: Use AppleScript to get system language
+        if system_type == "Darwin":
+            try:
+                result = subprocess.run(
+                    ["defaults", "read", "-g", "AppleLanguages"],
+                    capture_output=True,
+                    text=True,
+                    timeout=2,
+                )
+                if result.returncode == 0:
+                    # Parse output like: (\n    "zh-Hans-CN",\n    "en-CN"\n)
+                    output = result.stdout
+                    if '"zh' in output.lower():
+                        return "zh"
+                    elif '"ja' in output.lower():
+                        return "ja"
+                    elif '"ko' in output.lower():
+                        return "ko"
+                    elif '"de' in output.lower():
+                        return "de"
+                    elif '"fr' in output.lower():
+                        return "fr"
+                    elif '"es' in output.lower():
+                        return "es"
+            except Exception:
+                pass
+
+        # Fallback: Use locale
+        lang = locale.getdefaultlocale()[0] or os.environ.get("LANG", "en")
+        lang_code = lang.split("_")[0].lower()
+
+        if lang_code in TRANSLATIONS:
+            return lang_code
+
+        return "en"
+    except Exception:
+        return "en"
+
+
+def get_message(key: str, lang: str = None) -> str:
+    """Get localized message by key."""
+    if lang is None:
+        lang = get_system_language()
+
+    messages = TRANSLATIONS.get(lang, TRANSLATIONS["en"])
+    return messages.get(key, TRANSLATIONS["en"].get(key, ""))
 
 
 def debug_log(msg: str) -> None:
@@ -135,8 +277,12 @@ def main() -> int:
     debug_log(f"sys.argv: {sys.argv}")
     debug_log(f"stdin.isatty(): {sys.stdin.isatty()}")
 
+    # Detect system language once
+    lang = get_system_language()
+    debug_log(f"Detected language: {lang}")
+
     title = "Claude Code"
-    message = "Task Finished"
+    message = get_message(MSG_TASK_COMPLETED, lang)
 
     try:
         if not sys.stdin.isatty():
@@ -151,14 +297,37 @@ def main() -> int:
                     # Handle Notification events
                     if payload.get("hook_event_name") == "Notification":
                         notification_type = payload.get("notification_type", "")
+                        event_message = payload.get("message", "")
                         debug_log(f"Notification type: {notification_type}")
+                        debug_log(f"Event message: {event_message}")
 
+                        # 1. 根据 notification_type 处理（优先）
                         if notification_type == "permission_prompt":
-                            message = "Needs your permission"
+                            message = get_message(MSG_PERMISSION_PROMPT, lang)
                         elif notification_type == "idle_prompt":
-                            message = "Waiting for your input"
+                            message = get_message(MSG_IDLE_PROMPT, lang)
+                        elif notification_type == "auth_success":
+                            message = get_message(MSG_AUTH_SUCCESS, lang)
+                        elif notification_type == "elicitation_dialog":
+                            message = get_message(MSG_ELICITATION, lang)
+                        # 2. 兜底：根据 message 内容推断类型（解决 notification_type 缺失的 bug）
+                        elif event_message:
+                            msg_lower = event_message.lower()
+                            if "permission" in msg_lower or "allow" in msg_lower:
+                                message = get_message(MSG_PERMISSION_PROMPT, lang)
+                            elif "waiting" in msg_lower or "input" in msg_lower or "idle" in msg_lower:
+                                message = get_message(MSG_IDLE_PROMPT, lang)
+                            elif "auth" in msg_lower or "login" in msg_lower or "sign" in msg_lower:
+                                message = get_message(MSG_AUTH_REQUIRED, lang)
+                            elif "mcp" in msg_lower or "tool" in msg_lower or "elicit" in msg_lower:
+                                message = get_message(MSG_ELICITATION, lang)
+                            elif "question" in msg_lower or "choose" in msg_lower or "select" in msg_lower:
+                                message = get_message(MSG_QUESTION, lang)
+                            else:
+                                # 使用原始消息（截断）
+                                message = event_message[:100] + "..." if len(event_message) > 100 else event_message
                         else:
-                            message = "Needs your attention"
+                            message = get_message(MSG_ATTENTION, lang)
 
                         send_notification(title, message)
                         return 0
