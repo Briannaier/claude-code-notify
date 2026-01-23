@@ -11,23 +11,33 @@ Desktop notifications for [Claude Code](https://docs.anthropic.com/en/docs/claud
 
 ## Installation
 
+### Option 1: Claude Code Plugin (Recommended)
+
+Add the marketplace in Claude Code:
+
 ```bash
-pip install claude-code-notify
+claude /plugin:marketplace:add https://github.com/starpipi/claude-code-notify
+```
+
+Then install the plugin:
+
+```bash
+claude /plugin:install notify
+```
+
+### Option 2: pip/uv install
+
+```bash
+pip install git+https://github.com/starpipi/claude-code-notify.git
 ```
 
 Or with [uv](https://github.com/astral-sh/uv):
 
 ```bash
-uv tool install claude-code-notify
+uv tool install git+https://github.com/starpipi/claude-code-notify.git
 ```
 
-## Setup
-
-After installation, configure Claude Code to use this notification hook.
-
-### Option 1: Add to your Claude settings
-
-Add to `~/.claude/settings.json`:
+Then add to `~/.claude/settings.json`:
 
 ```json
 {
@@ -43,27 +53,6 @@ Add to `~/.claude/settings.json`:
       }
     ],
     "Notification": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "claude-code-notify"
-          }
-        ]
-      }
-    ]
-  }
-}
-```
-
-### Option 2: Project-level configuration
-
-Add to your project's `.claude/settings.json`:
-
-```json
-{
-  "hooks": {
-    "Stop": [
       {
         "hooks": [
           {
@@ -104,6 +93,10 @@ sudo pacman -S libnotify
 Test notifications directly from the command line:
 
 ```bash
+# If installed via plugin
+python3 ~/.claude/plugins/cache/claude-code-notify/notify/*/plugin/hooks/notify.py "Test" "Hello"
+
+# If installed via pip/uv
 claude-code-notify "Test Title" "Test message body"
 ```
 
@@ -113,4 +106,4 @@ Debug logs are written to `/tmp/claude_code_notify_debug.log` for troubleshootin
 
 ## License
 
-MIT
+Apache-2.0

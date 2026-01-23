@@ -1,0 +1,19 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "claude-code-notify",
+  "version": "1.0.0",
+  "description": "Desktop notifications for Claude Code - get notified when tasks complete, permission prompts appear, or Claude is waiting for input",
+  "owner": {
+    "name": "starpipi",
+    "email": "starpipi@users.noreply.github.com"
+  },
+  "plugins": [
+    {
+      "name": "notify",
+      "description": "Desktop notifications for task completion, permission prompts, and idle alerts",
+      "version": "1.0.0",
+      "source": "./plugin",
+      "category": "productivity"
+    }
+  ]
+}
