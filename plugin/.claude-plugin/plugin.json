@@ -1,6 +1,6 @@
 {
   "name": "notify",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Desktop notifications for Claude Code - get notified when tasks complete, permission prompts appear, or Claude is waiting for input",
   "author": {
     "name": "starpipi"
