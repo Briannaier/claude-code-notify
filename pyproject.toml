@@ -4,20 +4,21 @@ build-backend = "hatchling.build"
 
 [project]
 name = "claude-code-notify"
-version = "1.0.3"
-description = "Desktop notifications for Claude Code - get notified when tasks complete"
+version = "1.1.0"
+description = "Desktop notifications for Claude Code CLI · Windows · Apple-style popup · No sound"
 readme = "README.md"
 license = "Apache-2.0"
 authors = [
+    { name = "Briannaier" },
     { name = "starpipi" }
 ]
-keywords = ["claude", "claude-code", "notifications", "desktop", "macos", "windows", "linux"]
+keywords = ["claude", "claude-code", "notifications", "desktop", "windows", "wpf", "apple-style"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: Console",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
+    "Operating System :: Microsoft :: Windows",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
@@ -33,9 +34,9 @@ dependencies = []
 test = ["pytest>=7.0.0", "pytest-cov>=4.0.0"]
 
 [project.urls]
-Homepage = "https://github.com/starpipi/claude-code-notify"
-Repository = "https://github.com/starpipi/claude-code-notify"
-Issues = "https://github.com/starpipi/claude-code-notify/issues"
+Homepage = "https://github.com/Briannaier/claude-code-notify"
+Repository = "https://github.com/Briannaier/claude-code-notify"
+Issues = "https://github.com/Briannaier/claude-code-notify/issues"
 
 [project.scripts]
 claude-code-notify = "claude_code_notify.notify:main"
